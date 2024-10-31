@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Connect {
+public class TestConnect {
 
     String driver = "com.mysql.cj.jdbc.Driver";
     String url = "jdbc:mysql://localhost:3306/db_mpshop?serverTimezone=Asia/Seoul&characterEncoding=UTF-8";
@@ -15,7 +15,7 @@ public class Connect {
     Connection con = null;
     Statement stmt = null;
 
-    public Connect() {
+    public TestConnect() {
         try {
             Class.forName(driver);
             con = DriverManager.getConnection(url, user, pw);
@@ -36,6 +36,6 @@ public class Connect {
         }
     }
     public static void main(String[] args) {
-        new Connect();
+        new TestConnect();
     }
 }

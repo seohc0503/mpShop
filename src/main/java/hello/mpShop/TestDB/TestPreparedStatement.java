@@ -2,7 +2,7 @@ package hello.mpShop.TestDB;
 
 import java.sql.*;
 
-public class PreparedStatement {
+public class TestPreparedStatement {
 
     String driver = "com.mysql.cj.jdbc.Driver";
     String url = "jdbc:mysql://localhost:3306/db_mpshop?serverTimezone=Asia/Seoul&characterEncoding=UTF-8";
@@ -10,10 +10,10 @@ public class PreparedStatement {
     String pw = "1234";
 
     Connection con = null;
-    java.sql.PreparedStatement pstmt = null;
+    PreparedStatement pstmt = null;
     ResultSet rs = null;
 
-    public PreparedStatement() {
+    public TestPreparedStatement() {
         try {
             // JDBC Driver 로딩
             Class.forName(driver);
@@ -51,6 +51,6 @@ public class PreparedStatement {
         }
     }
     public static void main(String[] args) {
-        new PreparedStatement();
+        new TestPreparedStatement();
     }
 }
