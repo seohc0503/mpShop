@@ -1,4 +1,5 @@
 package hello.mpShop.member.memberdao;
+import hello.mpShop.member.jdbcutil.JDBCUtil;
 import hello.mpShop.member.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -9,24 +10,16 @@ import java.sql.*;
 @RequiredArgsConstructor
 public class MemberDAO {
 
-//    private final Member member;
+    private final JDBCUtil jdbcUtil;
 
-    String driver = "com.mysql.cj.jdbc.Driver";
-    String url = "jdbc:mysql://localhost:3306/db_mpshop?serverTimezone=Asia/Seoul&characterEncoding=UTF-8";
-    String user = "root";
-    String pw = "1234";
+    public int insertMember(Member member, Connection con) {
 
-    Connection con = null;
-    PreparedStatement pstmt = null;
-    int resultRow = 0;
-
-    public int insertMember(Member member) {
+        PreparedStatement pstmt = null;
+        int result = 0;
 
         try {
-            Class.forName(driver);
-            con = DriverManager.getConnection(url, user, pw);
+            con = jdbcUtil.getConnection();
             String sql = "INSERT INTO member VALUES (0,?,?,?,?,?,?)";
-
             pstmt = con.prepareStatement(sql);
 
             pstmt.setString(1, member.getName());
@@ -36,18 +29,16 @@ public class MemberDAO {
             pstmt.setString(5, member.getGender());
             pstmt.setDate(6, member.getBirth());
 
-            resultRow = pstmt.executeUpdate();
+            result = pstmt.executeUpdate();
 
+            if (result > 0) con.commit();
+            else con.rollback();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (pstmt != null) pstmt.close();
-                if (con != null) con.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            jdbcUtil.close(pstmt);
+            jdbcUtil.close(con);
         }
-        return resultRow;
+        return result;
     }
 }
