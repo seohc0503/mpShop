@@ -12,15 +12,14 @@ public class MemberDAO {
 
     private final JDBCUtil jdbcUtil;
 
-    public int insertMember(Member member, Connection con) {
+    public int insertMember(Member member, Connection con, PreparedStatement pstmt, ResultSet rs) {
 
-        PreparedStatement pstmt = null;
-        int result = 0;
-
+        int id = 0;
         try {
             con = jdbcUtil.getConnection();
-            String sql = "INSERT INTO member VALUES (0,?,?,?,?,?,?)";
-            pstmt = con.prepareStatement(sql);
+            String sql = "INSERT INTO member" +
+                    "(name, login_id, password, phone_number, gender, birth) VALUES (?,?,?,?,?,?)";
+            pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             pstmt.setString(1, member.getName());
             pstmt.setString(2, member.getLoginId());
@@ -29,16 +28,19 @@ public class MemberDAO {
             pstmt.setString(5, member.getGender());
             pstmt.setDate(6, member.getBirth());
 
-            result = pstmt.executeUpdate();
-
-            if (result > 0) con.commit();
-            else con.rollback();
+            pstmt.executeUpdate();
+            rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                member.setId(rs.getInt(1));
+                id = member.getId();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             jdbcUtil.close(pstmt);
             jdbcUtil.close(con);
+            jdbcUtil.close(rs);
         }
-        return result;
+        return id;
     }
 }

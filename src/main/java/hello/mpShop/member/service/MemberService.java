@@ -5,7 +5,10 @@ import hello.mpShop.member.memberdao.MemberDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.xml.transform.Result;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 @Service
 @RequiredArgsConstructor
@@ -15,8 +18,10 @@ public class MemberService {
 
     public Boolean save(Member member) {
         Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
 
-        int result = memberDAO.insertMember(member, con);
+        int result = memberDAO.insertMember(member, con, pstmt, rs);
         if (result > 0) return true;
         else return false;
     }

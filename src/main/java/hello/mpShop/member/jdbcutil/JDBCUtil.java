@@ -19,7 +19,6 @@ public class JDBCUtil {
         try {
             Class.forName(driver);
             con = DriverManager.getConnection(url, user, pw);
-            con.setAutoCommit(false);
         } catch (Exception e) {
             e.printStackTrace();
         }

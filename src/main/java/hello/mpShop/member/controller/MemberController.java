@@ -4,18 +4,12 @@ import hello.mpShop.member.member.Member;
 import hello.mpShop.member.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-
-// 요약
-// Response
-// id 관리
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class MemberController {
@@ -24,6 +18,14 @@ public class MemberController {
 
     @PostMapping("/save")
     public Boolean save(@RequestBody Member member) {
-        return memberService.save(member);
+        Boolean savedMember = memberService.save(member);
+        log.info("id = {}", member.getId());
+        log.info("name = {}", member.getName());
+        log.info("login_id = {}", member.getLoginId());
+        log.info("password = {}", member.getPw());
+        log.info("phone_number = {}", member.getPn());
+        log.info("gender = {}", member.getGender());
+        log.info("birth = {}", member.getBirth());
+        return savedMember;
     }
 }
