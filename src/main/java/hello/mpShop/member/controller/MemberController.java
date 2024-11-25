@@ -1,31 +1,48 @@
 package hello.mpShop.member.controller;
 
-import hello.mpShop.member.member.Member;
+import hello.mpShop.member.member.MemberDTO;
 import hello.mpShop.member.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/member")
 @RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
 
     @PostMapping("/save")
-    public Boolean save(@RequestBody Member member) {
-        Boolean savedMember = memberService.save(member);
-        log.info("id = {}", member.getId());
-        log.info("name = {}", member.getName());
-        log.info("login_id = {}", member.getLoginId());
-        log.info("password = {}", member.getPw());
-        log.info("phone_number = {}", member.getPn());
-        log.info("gender = {}", member.getGender());
-        log.info("birth = {}", member.getBirth());
-        return savedMember;
+    public int save(@RequestBody MemberDTO memberDTO) {
+        int savedMemberId = memberService.save(memberDTO);
+
+        log.info("id = {}", memberDTO.getId());
+        log.info("name = {}", memberDTO.getName());
+        log.info("login_id = {}", memberDTO.getLoginId());
+        log.info("password = {}", memberDTO.getPw());
+        log.info("phone_number = {}", memberDTO.getPn());
+        log.info("gender = {}", memberDTO.getGender());
+        log.info("birth = {}", memberDTO.getBirth());
+
+        return savedMemberId;
+    }
+
+    @GetMapping("/{loginId}")
+    public MemberDTO findById(@PathVariable(value = "loginId") String loginId) {
+
+        MemberDTO memberDTO = memberService.findById(loginId);
+
+        log.info("id = {}", memberDTO.getId());
+        log.info("name = {}", memberDTO.getName());
+        log.info("login_id = {}", memberDTO.getLoginId());
+        log.info("password = {}", memberDTO.getPw());
+        log.info("phone_number = {}", memberDTO.getPn());
+        log.info("gender = {}", memberDTO.getGender());
+        log.info("birth = {}", memberDTO.getBirth());
+
+        return memberDTO;
     }
 }
